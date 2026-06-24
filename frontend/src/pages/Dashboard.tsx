@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { analyzeJob } from "../services/api";
 
-import { analyzeJob } from "../services/api" ;
+type AnalysisResult = {
+  role: string;
+  skills: string[];
+  difficulty: string;
+  market_demand: string;
+  recommended_learning: string[];
+};
 
 export default function Dashboard() {
-
-    type AnalysisResult = {
-        role: string;
-        skills: string[];
-        roadmap: string[];
-    };
-
   const [jobDescription, setJobDescription] =
     useState("");
 
@@ -17,79 +17,176 @@ export default function Dashboard() {
     useState<AnalysisResult | null>(null);
 
   async function handleAnalyze() {
+    try {
+      const data = await analyzeJob(
+        jobDescription
+      );
 
-    const data = await analyzeJob(
-      jobDescription
-    );
+      setResult(data);
 
-    setResult(data);
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Analysis failed."
+      );
+    }
   }
 
   return (
-    <div style={{ padding: "30px" }}>
 
-      <h1>Career Copilot AI</h1>
+    <div className="min-h-screen bg-slate-100 flex justify-center">
 
-      <p>
-        Paste a job description
-      </p>
+    <div className="w-full max-w-4xl p-10">
 
-      <textarea
+    <h1 className="text-5xl font-bold mb-8">
 
-        rows={10}
+    Career Copilot AI
 
-        cols={80}
+    </h1>
 
-        value={jobDescription}
+    <p className="mb-4">
 
-        onChange={(e) =>
-          setJobDescription(
-            e.target.value
-          )
-        }
+    Paste a job description
 
-      />
+    </p>
 
-      <br />
+    <textarea
 
-      <button
-        onClick={handleAnalyze}
-      >
+    className="w-full p-4 border rounded-lg"
 
-        Analyze
+    rows={10}
 
-      </button>
+    value={jobDescription}
 
-      {result && (
+    onChange={(e)=>
 
-        <div>
+    setJobDescription(
 
-          <h3>
+    e.target.value
 
-            {result.role}
+    )
 
-          </h3>
+    }
 
-          <ul>
+    />
 
-            {result.skills.map(
-              (skill: string) => (
+    <button
 
-                <li key={skill}>
+    className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-5"
 
-                  {skill}
+    onClick={handleAnalyze}
 
-                </li>
+    >
 
-              )
-            )}
+    Analyze
 
-          </ul>
+    </button>
 
-        </div>
+    {result && (
 
-      )}
+    <div className="mt-10 bg-white p-8 rounded-xl shadow">
+
+    <h2 className="text-3xl font-bold mb-6">
+
+    {result.role}
+
+    </h2>
+
+    <h3 className="font-bold">
+
+    Skills
+
+    </h3>
+
+    <div className="flex flex-wrap gap-2 mb-8">
+
+    {
+
+    result.skills.map(
+
+    (skill)=>(
+
+    <span
+
+    key={skill}
+
+    className="bg-blue-100 px-3 py-1 rounded-full"
+
+    >
+
+    {skill}
+
+    </span>
+
+    )
+
+    )
+
+    }
 
     </div>
-  );
+
+    <h3 className="font-bold">
+
+    Difficulty
+
+    </h3>
+
+    <p>
+
+    {result.difficulty}
+
+    </p>
+
+    <h3 className="font-bold mt-5">
+
+    Market Demand
+
+    </h3>
+
+    <p>
+
+    {result.market_demand}
+
+    </p>
+
+    <h3 className="font-bold mt-5">
+
+    Recommended Learning
+
+    </h3>
+
+    <ul>
+
+    {
+
+    result.recommended_learning.map(
+
+    (item)=>(
+
+    <li key={item}>
+
+    {item}
+
+    </li>
+
+    )
+
+    )
+
+    }
+
+    </ul>
+
+    </div>
+
+    )}
+
+    </div>
+
+    </div>
+
+    )
 }
