@@ -1,4 +1,6 @@
 from fastapi import APIRouter
+from app.data.resume_profile import USER_SKILLS
+from app.utils.matcher import calculate_match
 
 router = APIRouter()
 
@@ -56,6 +58,14 @@ def analyze_job(data: dict):
     if len(skills) >= 6:
 
         difficulty = "Advanced"
+        
+    match_data = calculate_match(
+
+    skills,
+
+    USER_SKILLS
+
+    )
 
     return {
 
@@ -85,6 +95,12 @@ def analyze_job(data: dict):
 
             "RAG basics"
 
-        ]
+        ],
+        
+        "match_score": match_data["match_score"],
+
+        "matched_skills": match_data["matched_skills"],
+
+        "missing_skills": match_data["missing_skills"],
 
     }

@@ -7,11 +7,13 @@ type AnalysisResult = {
   difficulty: string;
   market_demand: string;
   recommended_learning: string[];
+  match_score: number;
+  matched_skills: string[];
+  missing_skills: string[];
 };
 
 export default function Dashboard() {
-  const [jobDescription, setJobDescription] =
-    useState("");
+  const [jobDescription, setJobDescription] = useState("");
 
   const [result, setResult] =
     useState<AnalysisResult | null>(null);
@@ -25,168 +27,154 @@ export default function Dashboard() {
       setResult(data);
 
     } catch (error) {
-
       console.error(error);
 
-      alert(
-        "Analysis failed."
-      );
+      alert("Analysis failed.");
     }
   }
 
   return (
-
     <div className="min-h-screen bg-slate-100 flex justify-center">
 
-    <div className="w-full max-w-4xl p-10">
+      <div className="w-full max-w-4xl p-10">
 
-    <h1 className="text-5xl font-bold mb-8">
+        <h1 className="text-5xl font-bold mb-8">
+          Career Copilot AI
+        </h1>
 
-    Career Copilot AI
+        <p className="mb-4">
+          Paste a job description
+        </p>
 
-    </h1>
+        <textarea
+          className="w-full p-4 border rounded-lg"
+          rows={10}
+          value={jobDescription}
+          onChange={(e) =>
+            setJobDescription(
+              e.target.value
+            )
+          }
+        />
 
-    <p className="mb-4">
+        <button
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-5"
+          onClick={handleAnalyze}
+        >
+          Analyze
+        </button>
 
-    Paste a job description
+        {result && (
 
-    </p>
+          <div className="mt-10 bg-white p-8 rounded-xl shadow">
 
-    <textarea
+            <h2 className="text-3xl font-bold mb-6">
+              {result.role}
+            </h2>
 
-    className="w-full p-4 border rounded-lg"
+            <h3 className="font-bold mb-2">
+              Skills
+            </h3>
 
-    rows={10}
+            <div className="flex flex-wrap gap-2 mb-8">
 
-    value={jobDescription}
+              {result.skills.map((skill) => (
 
-    onChange={(e)=>
+                <span
+                  key={skill}
+                  className="bg-blue-100 px-3 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
 
-    setJobDescription(
+              ))}
 
-    e.target.value
+            </div>
 
-    )
+            <h3 className="font-bold">
+              Difficulty
+            </h3>
 
-    }
+            <p>
+              {result.difficulty}
+            </p>
 
-    />
+            <h3 className="font-bold mt-5">
+              Market Demand
+            </h3>
 
-    <button
+            <p>
+              {result.market_demand}
+            </p>
 
-    className="bg-blue-600 text-white px-6 py-3 rounded-lg mt-5"
+            <h3 className="font-bold mt-5">
+              Match Score
+            </h3>
 
-    onClick={handleAnalyze}
+            <p className="text-2xl font-bold text-green-600">
+              {result.match_score}%
+            </p>
 
-    >
+            <h3 className="font-bold mt-5">
+              Matched Skills
+            </h3>
 
-    Analyze
+            <div className="flex flex-wrap gap-2">
 
-    </button>
+              {result.matched_skills.map((skill) => (
 
-    {result && (
+                <span
+                  key={skill}
+                  className="bg-green-100 px-3 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
 
-    <div className="mt-10 bg-white p-8 rounded-xl shadow">
+              ))}
 
-    <h2 className="text-3xl font-bold mb-6">
+            </div>
 
-    {result.role}
+            <h3 className="font-bold mt-5">
+              Missing Skills
+            </h3>
 
-    </h2>
+            <div className="flex flex-wrap gap-2">
 
-    <h3 className="font-bold">
+              {result.missing_skills.map((skill) => (
 
-    Skills
+                <span
+                  key={skill}
+                  className="bg-red-100 px-3 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
 
-    </h3>
+              ))}
 
-    <div className="flex flex-wrap gap-2 mb-8">
+            </div>
 
-    {
+            <h3 className="font-bold mt-5">
+              Recommended Learning
+            </h3>
 
-    result.skills.map(
+            <ul className="list-disc ml-6">
 
-    (skill)=>(
+              {result.recommended_learning.map((item) => (
 
-    <span
+                <li key={item}>
+                  {item}
+                </li>
 
-    key={skill}
+              ))}
 
-    className="bg-blue-100 px-3 py-1 rounded-full"
+            </ul>
 
-    >
+          </div>
 
-    {skill}
+        )}
 
-    </span>
-
-    )
-
-    )
-
-    }
+      </div>
 
     </div>
-
-    <h3 className="font-bold">
-
-    Difficulty
-
-    </h3>
-
-    <p>
-
-    {result.difficulty}
-
-    </p>
-
-    <h3 className="font-bold mt-5">
-
-    Market Demand
-
-    </h3>
-
-    <p>
-
-    {result.market_demand}
-
-    </p>
-
-    <h3 className="font-bold mt-5">
-
-    Recommended Learning
-
-    </h3>
-
-    <ul>
-
-    {
-
-    result.recommended_learning.map(
-
-    (item)=>(
-
-    <li key={item}>
-
-    {item}
-
-    </li>
-
-    )
-
-    )
-
-    }
-
-    </ul>
-
-    </div>
-
-    )}
-
-    </div>
-
-    </div>
-
-    )
+  );
 }
