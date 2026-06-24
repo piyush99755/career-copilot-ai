@@ -1,6 +1,13 @@
 from fastapi import FastAPI, APIRouter, HTTPException
 from app.routers import analyzer
 from fastapi.middleware.cors import CORSMiddleware
+from app.database import engine
+from app.models import Base
+
+
+Base.metadata.create_all(
+    bind=engine
+)
 
 app = FastAPI(
     title="Career Copilot AI",
