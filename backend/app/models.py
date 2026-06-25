@@ -2,12 +2,14 @@ from sqlalchemy import (
     Column,
     Integer,
     String,
-    Text
+    Text,
+    DateTime
 )
 
 from sqlalchemy.orm import declarative_base
+from datetime import datetime
+from app.database import Base
 
-Base = declarative_base()
 
 class Analysis(Base):
 
@@ -38,3 +40,14 @@ class Analysis(Base):
     match_score = Column(
         Integer
     )
+    
+class Resume(Base):
+    __tablename__ = "resumes"
+    
+    id = Column(Integer, primary_key=True, index=True )
+    
+    filename = Column(String, nullable=False)
+    
+    content= Column(Text, nullable=False)
+    
+    uploaded_at= Column(DateTime, default=datetime.utcnow)
