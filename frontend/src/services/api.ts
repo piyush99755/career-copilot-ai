@@ -1,26 +1,25 @@
+import axios from "axios";
 
 const API_BASE = "http://127.0.0.1:8000";
 
-export async function analyzeJob(
-    jobDescription: string
-) {
-    const response = await fetch(
-        `${API_BASE}/analyze`,
-        {
-            method:'POST',
+const api = axios.create({
+  baseURL: API_BASE,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-        headers: {
-            "Content-Type":"application/json",
+export async function analyzeJob(jobDescription: string) {
+  const response = await api.post("/analyze", {
+    job_description: jobDescription,
+  });
 
-        },
-
-        body: JSON.stringify({
-            job_description: jobDescription,
-
-        }),
-        
-
-        }
-    );
-    return response.json();
+  return response.data;
 }
+
+export async function getHistory() {
+  const response = await api.get("/history");
+  return response.data;
+}
+
+export default api;
