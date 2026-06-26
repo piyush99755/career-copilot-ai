@@ -47,6 +47,19 @@ const Sidebar = () => {
         >
           Resume
         </NavLink>
+
+        <NavLink
+          to="/resume-match"
+          className={({ isActive }) =>
+            `block rounded-lg px-4 py-2 transition ${
+              isActive
+                ? "bg-blue-600"
+                : "hover:bg-slate-700"
+            }`
+          }
+        >
+          Resume Match
+        </NavLink>
       </nav>
     </aside>
   );

@@ -32,4 +32,11 @@ export async function uploadResume(file: File) {
 
 }
 
+export async function matchResume(jobDescription: string) {
+  const response = await api.post("/resume-match", {
+    job_description: jobDescription
+});
+  return response.data;
+}
+
 export default api;
