@@ -10,7 +10,7 @@ from app.models import Resume
 router = APIRouter()
 
 @router.post(
-    '/upload-resume',
+    '/upload_resume',
     response_model=ResumeResponse
 )
 async def upload_resume(
