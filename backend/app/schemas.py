@@ -13,4 +13,11 @@ class ResumeResponse(BaseModel):
     
     class config:
         from_attributes = True
+
+class ResumeMatchRequest(BaseModel):
+    job_description:str
     
+class ResumeMatchResponse(BaseModel):
+    match_score: int
+    matched_skills: list[str]
+    missing_skills: list[str]   

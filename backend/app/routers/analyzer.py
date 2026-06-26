@@ -1,53 +1,19 @@
 from fastapi import APIRouter
 from app.data.resume_profile import USER_SKILLS
-from app.utils.matcher import calculate_match
 from app.database import SessionLocal
 from app.models import Analysis
 from app.schemas import JobRequest
+from app.utils.matcher import calculate_match, extract_skills
 
 router = APIRouter()
 
 @router.post("/analyze")
 def analyze_job(data: JobRequest):
 
-    text = data.job_description.strip().lower()
+    
 
-    possible_skills = [
+    skills = extract_skills(data.job_description)
 
-        "python",
-
-        "react",
-
-        "fastapi",
-
-        "aws",
-
-        "docker",
-
-        "postgresql",
-
-        "langchain",
-
-        "langgraph",
-
-        "javascript",
-
-        "typescript",
-
-        "openai",
-
-        "ai agents",
-
-        "next.js"
-    ]
-
-    skills = []
-
-    for skill in possible_skills:
-
-        if skill in text:
-
-            skills.append(skill)
 
     difficulty = "Beginner"
 
@@ -61,9 +27,8 @@ def analyze_job(data: JobRequest):
         
     match_data = calculate_match(
 
-    skills,
-
-    USER_SKILLS
+    USER_SKILLS,
+    skills
 
     )
     

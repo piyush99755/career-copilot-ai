@@ -1,12 +1,44 @@
-def calculate_match(job_skills, user_skills):
+KNOWN_SKILLS = [
+    "python",
+    "react",
+    "fastapi",
+    "aws",
+    "docker",
+    "postgresql",
+    "langchain",
+    "langgraph",
+    "javascript",
+    "typescript",
+    "openai",
+    "ai agents",
+    "next.js"
+]
+
+
+def extract_skills(text: str):
+
+    text = text.strip().lower()
+
+    skills = []
+
+    for skill in KNOWN_SKILLS:
+
+        if skill in text:
+
+            skills.append(skill)
+
+    return skills
+
+
+def calculate_match(candidate_skills, required_skills):
 
     matched = []
 
     missing = []
 
-    for skill in job_skills:
+    for skill in required_skills:
 
-        if skill in user_skills:
+        if skill in candidate_skills:
 
             matched.append(skill)
 
@@ -16,13 +48,13 @@ def calculate_match(job_skills, user_skills):
 
     score = 0
 
-    if len(job_skills) > 0:
+    if len(required_skills) > 0:
 
         score = round(
 
             len(matched)
 
-            / len(job_skills)
+            / len(required_skills)
 
             * 100
 

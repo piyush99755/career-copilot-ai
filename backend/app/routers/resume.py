@@ -1,16 +1,17 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from pypdf import PdfReader
 from io import BytesIO
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.schemas import ResumeResponse
+from app.schemas import ResumeResponse, ResumeMatchResponse, ResumeMatchRequest
 from app.models import Resume
+from app.utils.matcher import extract_skills, calculate_match
 
 
 router = APIRouter()
 
 @router.post(
-    '/upload_resume',
+    '/upload-resume',
     response_model=ResumeResponse
 )
 async def upload_resume(
@@ -40,3 +41,33 @@ async def upload_resume(
     
      
         
+@router.post(
+    '/resume-match',
+    response_model= ResumeMatchResponse
+)
+def match_resume(
+    request: ResumeMatchRequest,
+    db: Session = Depends(get_db)
+):
+    # Get latest updated resume..
+    latest_resume = (
+        db.query(Resume).
+        order_by(Resume.
+        uploaded_at.desc()).
+        first()
+    )
+    
+    if not latest_resume:
+        raise HTTPException(status_code=404, detail="No Resume Found!!!")
+    
+    # Extract skills
+    
+    resume_skills = extract_skills(latest_resume.content)
+    job_skills = extract_skills(request.job_description)
+    match_data = calculate_match(resume_skills, job_skills)
+    
+    return ResumeMatchResponse(
+    match_score=match_data["match_score"],
+    matched_skills=match_data["matched_skills"],
+    missing_skills=match_data["missing_skills"]
+)

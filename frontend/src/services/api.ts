@@ -27,7 +27,7 @@ export async function uploadResume(file: File) {
   const formData = new FormData();
 
   formData.append("file", file)
-  const response = await api.post("/upload_resume", formData);
+  const response = await api.post("/upload-resume", formData);
   return response.data;
 
 }
