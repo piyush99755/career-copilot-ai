@@ -69,3 +69,18 @@ def calculate_match(candidate_skills, required_skills):
         "missing_skills": missing
 
     }
+
+def normalize_skills(skills):
+    
+    normalized = []
+    
+    for skill in skills:
+        skill = skill.lower().strip()
+        
+        if skill not in normalized:
+            normalized.append(skill)
+            
+    return normalized
+        
+    
+        

@@ -3,16 +3,27 @@ from app.data.resume_profile import USER_SKILLS
 from app.database import SessionLocal
 from app.models import Analysis
 from app.schemas import JobRequest
-from app.utils.matcher import calculate_match, extract_skills
+from app.services.ai_service import AIService
+from app.utils.matcher import calculate_match, normalize_skills
 
 router = APIRouter()
+
+ai_service = AIService()
 
 @router.post("/analyze")
 def analyze_job(data: JobRequest):
 
     
 
-    skills = extract_skills(data.job_description)
+    result = ai_service.extract_skills(
+    data.job_description
+    )
+
+    skills = result["technical_skills"]
+
+    skills = normalize_skills(skills)
+    
+    
 
 
     difficulty = "Beginner"
