@@ -5,10 +5,13 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.schemas import ResumeResponse, ResumeMatchResponse, ResumeMatchRequest
 from app.models import Resume
-from app.utils.matcher import extract_skills, calculate_match
+from app.utils.matcher import normalize_skills, calculate_match
+from app.services.ai_service import AIService
 
 
 router = APIRouter()
+
+ai_service = AIService()
 
 @router.post(
     '/upload-resume',
@@ -62,9 +65,15 @@ def match_resume(
     
     # Extract skills
     
-    resume_skills = extract_skills(latest_resume.content)
-    job_skills = extract_skills(request.job_description)
-    match_data = calculate_match(resume_skills, job_skills)
+    resume_skills = ai_service.extract_skills(latest_resume.content)
+    r_skills = resume_skills['technical_skills']
+    r_skills = normalize_skills(r_skills)
+    
+    job_skills = ai_service.extract_skills(request.job_description)
+    j_skills = job_skills['technical_skills']
+    j_skills = normalize_skills(j_skills)
+    
+    match_data = calculate_match(r_skills, j_skills)
     
     return ResumeMatchResponse(
     match_score=match_data["match_score"],
