@@ -73,10 +73,24 @@ def match_resume(
     j_skills = job_skills['technical_skills']
     j_skills = normalize_skills(j_skills)
     
+    
+    
     match_data = calculate_match(r_skills, j_skills)
+    
+    roadmap_data = ai_service.generate_learning_roadmap(
+        matched_skills = match_data["matched_skills"],
+        missing_skills = match_data["missing_skills"],
+        role= "AI Full Stack Developer"
+        
+    )
     
     return ResumeMatchResponse(
     match_score=match_data["match_score"],
     matched_skills=match_data["matched_skills"],
-    missing_skills=match_data["missing_skills"]
+    missing_skills=match_data["missing_skills"],
+    
+    roadmap=roadmap_data["roadmap"],
+    
+    recommended_project=roadmap_data["recommended_project"]
+    
 )

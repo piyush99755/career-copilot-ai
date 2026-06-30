@@ -21,3 +21,6 @@ class ResumeMatchResponse(BaseModel):
     match_score: int
     matched_skills: list[str]
     missing_skills: list[str]   
+    roadmap: dict[str, list[str]]
+
+    recommended_project: str
