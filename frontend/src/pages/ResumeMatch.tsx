@@ -2,9 +2,11 @@ import { useState } from "react";
 import { matchResume } from "../services/api";
 
 interface ResumeMatchResult {
-  match_score: number;
-  matched_skills: string[];
-  missing_skills: string[];
+  match_score: number
+  matched_skills: string[]
+  missing_skills: string[]
+  roadmap: Record<string, string[]>
+  recommended_project: string
 }
 
 const ResumeMatch = () => {
@@ -112,10 +114,46 @@ const ResumeMatch = () => {
             ))}
           </div>
 
+          <h3 className="font-bold mt-6 mb-3">
+            Learning Roadmap
+          </h3>
+
+          <div className="space-y-4">
+            {Object.entries(resumeMatch.roadmap).map(
+              ([week, topics]) => (
+                <div
+                  key={week}
+                  className="border rounded-lg p-4"
+                >
+                  <h4 className="font-semibold capitalize mb-2">
+                    {week.replace("_", " ")}
+                  </h4>
+
+                  <ul className="list-disc list-inside space-y-1">
+                    {topics.map((topic) => (
+                      <li key={topic}>
+                        {topic}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            )}
+          </div>
+
+          <h3 className="font-bold mt-6 mb-2">
+            Recommended Project
+          </h3>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            {resumeMatch.recommended_project}
+          </div>
+
         </div>
       )}
 
     </div>
+    
   </div>
 );
 
