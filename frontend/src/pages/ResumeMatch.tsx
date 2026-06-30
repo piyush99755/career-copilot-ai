@@ -39,6 +39,38 @@ const ResumeMatch = () => {
         }
     }
 
+    const getMatchStatus = (score: number) => {
+    if (score >= 80)
+      return {
+        label: "Excellent Match",
+        color: "text-green-600",
+      };
+
+    if (score >= 60)
+      return {
+        label: "Strong Match",
+        color: "text-green-500",
+      };
+
+    if (score >= 40)
+      return {
+        label: "Moderate Match",
+        color: "text-orange-500",
+      };
+
+    return {
+      label: "Weak Match",
+      color: "text-red-500",
+    };
+  };
+
+  const matchStatus = resumeMatch
+    ? getMatchStatus(resumeMatch.match_score)
+    : null;
+
+  
+    
+
    return (
     <div className="min-h-screen bg-slate-100 flex justify-center">
       <div className="w-full max-w-5xl p-10">
@@ -57,16 +89,24 @@ const ResumeMatch = () => {
 
           <button
             onClick={handleResumeMatch}
-            className="mt-5 bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-xl font-medium"
+            disabled={loading}
+            className="
+              mt-5
+              bg-blue-600
+              hover:bg-blue-700
+              disabled:bg-gray-400
+              disabled:cursor-not-allowed
+              transition
+              text-white
+              px-6
+              py-3
+              rounded-xl
+              font-medium
+            "
           >
-            Compare Resume
+            {loading ? "Analyzing..." : "Compare Resume"}
           </button>
-
-          {loading && (
-            <p className="mt-5 text-gray-600">
-              Comparing...
-            </p>
-          )}
+          
 
           {message && (
             <p className="mt-5 text-blue-600">
@@ -83,7 +123,9 @@ const ResumeMatch = () => {
             </h2>
 
             <div className="flex items-center gap-4 mb-8">
-              <div className="text-6xl font-bold text-green-600">
+              <div
+                className={`text-6xl font-bold ${matchStatus?.color}`}
+              >
                 {resumeMatch.match_score}%
               </div>
 
@@ -92,8 +134,8 @@ const ResumeMatch = () => {
                   Resume Compatibility
                 </p>
 
-                <p className="font-semibold text-slate-700">
-                  Strong Match
+                <p className={`font-semibold ${matchStatus?.color}`}>
+                  {matchStatus?.label}
                 </p>
               </div>
             </div>
@@ -216,8 +258,38 @@ const ResumeMatch = () => {
 
           </div>
         )}
+        
 
       </div>
+       {loading && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
+
+            <div
+              className="
+                w-14
+                h-14
+                border-4
+                border-blue-200
+                border-t-blue-600
+                rounded-full
+                animate-spin
+              "
+            />
+
+            <h3 className="mt-4 text-lg font-semibold text-slate-800">
+              Analyzing Resume
+            </h3>
+
+            <p className="text-sm text-slate-500 mt-2">
+              Matching skills and generating your roadmap...
+            </p>
+
+          </div>
+        </div>
+      )}
+
+      
     </div>
 );
 
