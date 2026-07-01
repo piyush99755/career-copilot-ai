@@ -40,3 +40,11 @@ export async function matchResume(jobDescription: string) {
 }
 
 export default api;
+
+export async function careerChat(question: string) {
+  const response = await api.post('/career-chat', {
+    question
+  }
+);
+  return response.data;
+}
