@@ -264,15 +264,26 @@ class AIService:
     def answer_with_context(
         self,
         question: str,
-        context: str
+        context: str,
+        conversation_history: str
     ):
         prompt = f"""
-        Use ONLY the provided context.
+        You are an AI Career Coach.
 
-        Context:
+        Use the resume context and conversation history
+        to answer the user's question.
+
+        If the user asks a follow-up question,
+        use the conversation history to understand
+        what they mean.
+
+        Conversation History:
+        {conversation_history}
+
+        Resume Context:
         {context}
 
-        Question:
+        Current Question:
         {question}
 
         Answer:

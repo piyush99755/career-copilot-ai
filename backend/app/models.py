@@ -51,3 +51,16 @@ class Resume(Base):
     content= Column(Text, nullable=False)
     
     uploaded_at= Column(DateTime, default=datetime.utcnow)
+    
+class ConversationMessage(Base):
+    __tablename__ = "conversation_messages"
+    
+    id = Column(Integer, index=True, primary_key=True)
+    
+    conversation_id = Column(String,nullable=True)
+    
+    role = Column(String, nullable=False)
+    
+    content = Column(Text, nullable=False)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
