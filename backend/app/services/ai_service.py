@@ -260,3 +260,33 @@ class AIService:
         )
         
         return response["embedding"]
+    
+    def answer_with_context(
+        self,
+        question: str,
+        context: str
+    ):
+        prompt = f"""
+        Use ONLY the provided context.
+
+        Context:
+        {context}
+
+        Question:
+        {question}
+
+        Answer:
+        """
+        
+        response = chat(
+            model="llama3.2",
+            messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+            
+        )
+        
+        return response["message"]["content"]
