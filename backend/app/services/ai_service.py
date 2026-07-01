@@ -1,4 +1,4 @@
-from ollama import chat
+from ollama import chat, embeddings
 import json
 
 class AIService:
@@ -251,3 +251,12 @@ class AIService:
         
         
         return roadmap_data
+    
+    
+    def generate_embedding(self, text:str):
+        response = embeddings(
+            model="nomic-embed-text",
+            prompt=text
+        )
+        
+        return response["embedding"]
