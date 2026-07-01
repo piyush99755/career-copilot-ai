@@ -7,11 +7,17 @@ from app.schemas import ResumeResponse, ResumeMatchResponse, ResumeMatchRequest
 from app.models import Resume
 from app.utils.matcher import normalize_skills, calculate_match
 from app.services.ai_service import AIService
+from app.services.chunking_service import ChunkingService
+from app.services.vector_service import VectorService
 
 
 router = APIRouter()
 
 ai_service = AIService()
+
+chunking_service = ChunkingService()
+
+vector_service = VectorService()
 
 @router.post(
     '/upload-resume',
@@ -40,7 +46,25 @@ async def upload_resume(
     db.commit()
     db.refresh(resume)
     
+    
+
+    
+    chunks = chunking_service.chunk_text(text)
+
+    
+    
+    for index, chunk in enumerate(chunks):
+        embedding = ai_service.generate_embedding(chunk)
+        
+        vector_service.store_chunk(
+            chunk_id=f"resume_{resume.id}_chunk_{index}",
+            chunk_text=chunk,
+            embedding=embedding
+            
+        )
+        
     return resume
+        
     
      
         

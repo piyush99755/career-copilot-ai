@@ -11,7 +11,7 @@ class ChunkingService:
             chunks.append(
                 text[i:i+chunk_size]
         )
-            return chunks
+        return chunks
         
     
     
