@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException
-from app.routers import analyzer, resume
+from app.routers import analyzer, resume, career_chat
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine
 from app.models import Base
@@ -29,6 +29,7 @@ app.add_middleware(
 
 app.include_router(analyzer.router)
 app.include_router(resume.router)
+app.include_router(career_chat.router)
 
 
 @app.get('/')

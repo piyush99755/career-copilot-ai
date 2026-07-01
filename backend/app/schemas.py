@@ -24,3 +24,9 @@ class ResumeMatchResponse(BaseModel):
     roadmap: dict[str, list[str]]
 
     recommended_project: str
+    
+class CareerChatRequest(BaseModel):
+    question:str
+    
+class CareerChatResponse(BaseModel):
+    answer: str
